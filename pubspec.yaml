@@ -1,0 +1,56 @@
+name: eiga_learn
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^16.2.1
+  tflite_flutter: ^0.11.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  video_player: ^2.8.1
+  chewie: ^1.7.4
+  file_picker: ^10.3.3
+  path_provider: ^2.0.0
+  http: ^1.5.0
+  hooks_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.0
+  onnx_translation: ^0.1.2
+  ffi: ^2.1.4
+  intl: ^0.20.2
+  cross_platform_video_thumbnails: ^0.0.2
+  ffmpeg_kit_flutter_new: ^3.2.0
+  fc_native_video_thumbnail: ^0.17.2
+  uuid: ^4.5.1
+  json_serializable: ^6.8.0
+  mecab_for_flutter: ^1.0.6
+  sqflite_common_ffi: ^2.3.0
+  xml: ^6.1.0
+  characters: ^1.2.0
+  wakelock_plus: ^1.2.0
+  io: ^1.0.5
+  shared_preferences: ^2.5.3
+  video_player_win: ^3.2.0
+  collection: ^1.19.1
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.7
+  isar_generator: ^3.1.0
+
+flutter:
+  uses-material-design: true
+  assets:
+#    - assets/ffmpeg/ffmpeg.exe
+    - assets/JMdict_e/JMdict_e.xml
