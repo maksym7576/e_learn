@@ -6,8 +6,8 @@ class VideoObject {
   Id id = Isar.autoIncrement;
 
   @Index(type: IndexType.value)
-  String? originalLanguageLong;
-  String? translatedLanguageLong;
+  int? originalLanguageId;
+  int? translatedLanguageId;
   String? videoName;
   String? srtPath;
   String? videoPath;

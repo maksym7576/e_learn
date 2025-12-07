@@ -7,4 +7,5 @@ class LanguageObject {
 
   @Index(type: IndexType.value)
   String? language;
+  bool? isSupported;
 }

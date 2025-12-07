@@ -1,4 +1,4 @@
-import 'package:eiga_learn/models/wordObject.dart';
+import 'package:eiga_learn/data/models/wordObject.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 

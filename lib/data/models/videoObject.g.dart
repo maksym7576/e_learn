@@ -22,10 +22,10 @@ const VideoObjectSchema = CollectionSchema(
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
-    r'originalLanguageLong': PropertySchema(
+    r'originalLanguageId': PropertySchema(
       id: 1,
-      name: r'originalLanguageLong',
-      type: IsarType.string,
+      name: r'originalLanguageId',
+      type: IsarType.long,
     ),
     r'srtPath': PropertySchema(
       id: 2,
@@ -37,10 +37,10 @@ const VideoObjectSchema = CollectionSchema(
       name: r'thumbnailPath',
       type: IsarType.string,
     ),
-    r'translatedLanguageLong': PropertySchema(
+    r'translatedLanguageId': PropertySchema(
       id: 4,
-      name: r'translatedLanguageLong',
-      type: IsarType.string,
+      name: r'translatedLanguageId',
+      type: IsarType.long,
     ),
     r'videoName': PropertySchema(
       id: 5,
@@ -59,16 +59,16 @@ const VideoObjectSchema = CollectionSchema(
   deserializeProp: _videoObjectDeserializeProp,
   idName: r'id',
   indexes: {
-    r'originalLanguageLong': IndexSchema(
-      id: 6795158064006324457,
-      name: r'originalLanguageLong',
+    r'originalLanguageId': IndexSchema(
+      id: 700307589987719689,
+      name: r'originalLanguageId',
       unique: false,
       replace: false,
       properties: [
         IndexPropertySchema(
-          name: r'originalLanguageLong',
+          name: r'originalLanguageId',
           type: IndexType.value,
-          caseSensitive: true,
+          caseSensitive: false,
         )
       ],
     )
@@ -88,12 +88,6 @@ int _videoObjectEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
-    final value = object.originalLanguageLong;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
     final value = object.srtPath;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -101,12 +95,6 @@ int _videoObjectEstimateSize(
   }
   {
     final value = object.thumbnailPath;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.translatedLanguageLong;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -133,10 +121,10 @@ void _videoObjectSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeString(offsets[1], object.originalLanguageLong);
+  writer.writeLong(offsets[1], object.originalLanguageId);
   writer.writeString(offsets[2], object.srtPath);
   writer.writeString(offsets[3], object.thumbnailPath);
-  writer.writeString(offsets[4], object.translatedLanguageLong);
+  writer.writeLong(offsets[4], object.translatedLanguageId);
   writer.writeString(offsets[5], object.videoName);
   writer.writeString(offsets[6], object.videoPath);
 }
@@ -150,10 +138,10 @@ VideoObject _videoObjectDeserialize(
   final object = VideoObject();
   object.createdAt = reader.readDateTimeOrNull(offsets[0]);
   object.id = id;
-  object.originalLanguageLong = reader.readStringOrNull(offsets[1]);
+  object.originalLanguageId = reader.readLongOrNull(offsets[1]);
   object.srtPath = reader.readStringOrNull(offsets[2]);
   object.thumbnailPath = reader.readStringOrNull(offsets[3]);
-  object.translatedLanguageLong = reader.readStringOrNull(offsets[4]);
+  object.translatedLanguageId = reader.readLongOrNull(offsets[4]);
   object.videoName = reader.readStringOrNull(offsets[5]);
   object.videoPath = reader.readStringOrNull(offsets[6]);
   return object;
@@ -169,13 +157,13 @@ P _videoObjectDeserializeProp<P>(
     case 0:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
@@ -206,11 +194,10 @@ extension VideoObjectQueryWhereSort
     });
   }
 
-  QueryBuilder<VideoObject, VideoObject, QAfterWhere>
-      anyOriginalLanguageLong() {
+  QueryBuilder<VideoObject, VideoObject, QAfterWhere> anyOriginalLanguageId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'originalLanguageLong'),
+        const IndexWhereClause.any(indexName: r'originalLanguageId'),
       );
     });
   }
@@ -285,20 +272,20 @@ extension VideoObjectQueryWhere
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongIsNull() {
+      originalLanguageIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'originalLanguageLong',
+        indexName: r'originalLanguageId',
         value: [null],
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongIsNotNull() {
+      originalLanguageIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'originalLanguageLong',
+        indexName: r'originalLanguageId',
         lower: [null],
         includeLower: false,
         upper: [],
@@ -307,44 +294,44 @@ extension VideoObjectQueryWhere
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongEqualTo(String? originalLanguageLong) {
+      originalLanguageIdEqualTo(int? originalLanguageId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'originalLanguageLong',
-        value: [originalLanguageLong],
+        indexName: r'originalLanguageId',
+        value: [originalLanguageId],
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongNotEqualTo(String? originalLanguageLong) {
+      originalLanguageIdNotEqualTo(int? originalLanguageId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'originalLanguageLong',
+              indexName: r'originalLanguageId',
               lower: [],
-              upper: [originalLanguageLong],
+              upper: [originalLanguageId],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'originalLanguageLong',
-              lower: [originalLanguageLong],
+              indexName: r'originalLanguageId',
+              lower: [originalLanguageId],
               includeLower: false,
               upper: [],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'originalLanguageLong',
-              lower: [originalLanguageLong],
+              indexName: r'originalLanguageId',
+              lower: [originalLanguageId],
               includeLower: false,
               upper: [],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'originalLanguageLong',
+              indexName: r'originalLanguageId',
               lower: [],
-              upper: [originalLanguageLong],
+              upper: [originalLanguageId],
               includeUpper: false,
             ));
       }
@@ -352,14 +339,14 @@ extension VideoObjectQueryWhere
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongGreaterThan(
-    String? originalLanguageLong, {
+      originalLanguageIdGreaterThan(
+    int? originalLanguageId, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'originalLanguageLong',
-        lower: [originalLanguageLong],
+        indexName: r'originalLanguageId',
+        lower: [originalLanguageId],
         includeLower: include,
         upper: [],
       ));
@@ -367,83 +354,35 @@ extension VideoObjectQueryWhere
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongLessThan(
-    String? originalLanguageLong, {
+      originalLanguageIdLessThan(
+    int? originalLanguageId, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'originalLanguageLong',
+        indexName: r'originalLanguageId',
         lower: [],
-        upper: [originalLanguageLong],
+        upper: [originalLanguageId],
         includeUpper: include,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongBetween(
-    String? lowerOriginalLanguageLong,
-    String? upperOriginalLanguageLong, {
+      originalLanguageIdBetween(
+    int? lowerOriginalLanguageId,
+    int? upperOriginalLanguageId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'originalLanguageLong',
-        lower: [lowerOriginalLanguageLong],
+        indexName: r'originalLanguageId',
+        lower: [lowerOriginalLanguageId],
         includeLower: includeLower,
-        upper: [upperOriginalLanguageLong],
+        upper: [upperOriginalLanguageId],
         includeUpper: includeUpper,
       ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongStartsWith(String OriginalLanguageLongPrefix) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'originalLanguageLong',
-        lower: [OriginalLanguageLongPrefix],
-        upper: ['$OriginalLanguageLongPrefix\u{FFFFF}'],
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'originalLanguageLong',
-        value: [''],
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterWhereClause>
-      originalLanguageLongIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.lessThan(
-              indexName: r'originalLanguageLong',
-              upper: [''],
-            ))
-            .addWhereClause(IndexWhereClause.greaterThan(
-              indexName: r'originalLanguageLong',
-              lower: [''],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.greaterThan(
-              indexName: r'originalLanguageLong',
-              lower: [''],
-            ))
-            .addWhereClause(IndexWhereClause.lessThan(
-              indexName: r'originalLanguageLong',
-              upper: [''],
-            ));
-      }
     });
   }
 }
@@ -578,155 +517,75 @@ extension VideoObjectQueryFilter
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongIsNull() {
+      originalLanguageIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongIsNotNull() {
+      originalLanguageIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+      originalLanguageIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongGreaterThan(
-    String? value, {
+      originalLanguageIdGreaterThan(
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongLessThan(
-    String? value, {
+      originalLanguageIdLessThan(
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongBetween(
-    String? lower,
-    String? upper, {
+      originalLanguageIdBetween(
+    int? lower,
+    int? upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'originalLanguageLong',
+        property: r'originalLanguageId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'originalLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'originalLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'originalLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'originalLanguageLong',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'originalLanguageLong',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      originalLanguageLongIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'originalLanguageLong',
-        value: '',
       ));
     });
   }
@@ -1038,157 +897,75 @@ extension VideoObjectQueryFilter
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongIsNull() {
+      translatedLanguageIdIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongIsNotNull() {
+      translatedLanguageIdIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+      translatedLanguageIdEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongGreaterThan(
-    String? value, {
+      translatedLanguageIdGreaterThan(
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongLessThan(
-    String? value, {
+      translatedLanguageIdLessThan(
+    int? value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongBetween(
-    String? lower,
-    String? upper, {
+      translatedLanguageIdBetween(
+    int? lower,
+    int? upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'translatedLanguageLong',
+        property: r'translatedLanguageId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'translatedLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'translatedLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'translatedLanguageLong',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'translatedLanguageLong',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'translatedLanguageLong',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VideoObject, VideoObject, QAfterFilterCondition>
-      translatedLanguageLongIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'translatedLanguageLong',
-        value: '',
       ));
     });
   }
@@ -1523,16 +1300,16 @@ extension VideoObjectQuerySortBy
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      sortByOriginalLanguageLong() {
+      sortByOriginalLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'originalLanguageLong', Sort.asc);
+      return query.addSortBy(r'originalLanguageId', Sort.asc);
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      sortByOriginalLanguageLongDesc() {
+      sortByOriginalLanguageIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'originalLanguageLong', Sort.desc);
+      return query.addSortBy(r'originalLanguageId', Sort.desc);
     });
   }
 
@@ -1562,16 +1339,16 @@ extension VideoObjectQuerySortBy
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      sortByTranslatedLanguageLong() {
+      sortByTranslatedLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'translatedLanguageLong', Sort.asc);
+      return query.addSortBy(r'translatedLanguageId', Sort.asc);
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      sortByTranslatedLanguageLongDesc() {
+      sortByTranslatedLanguageIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'translatedLanguageLong', Sort.desc);
+      return query.addSortBy(r'translatedLanguageId', Sort.desc);
     });
   }
 
@@ -1627,16 +1404,16 @@ extension VideoObjectQuerySortThenBy
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      thenByOriginalLanguageLong() {
+      thenByOriginalLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'originalLanguageLong', Sort.asc);
+      return query.addSortBy(r'originalLanguageId', Sort.asc);
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      thenByOriginalLanguageLongDesc() {
+      thenByOriginalLanguageIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'originalLanguageLong', Sort.desc);
+      return query.addSortBy(r'originalLanguageId', Sort.desc);
     });
   }
 
@@ -1666,16 +1443,16 @@ extension VideoObjectQuerySortThenBy
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      thenByTranslatedLanguageLong() {
+      thenByTranslatedLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'translatedLanguageLong', Sort.asc);
+      return query.addSortBy(r'translatedLanguageId', Sort.asc);
     });
   }
 
   QueryBuilder<VideoObject, VideoObject, QAfterSortBy>
-      thenByTranslatedLanguageLongDesc() {
+      thenByTranslatedLanguageIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'translatedLanguageLong', Sort.desc);
+      return query.addSortBy(r'translatedLanguageId', Sort.desc);
     });
   }
 
@@ -1713,10 +1490,9 @@ extension VideoObjectQueryWhereDistinct
   }
 
   QueryBuilder<VideoObject, VideoObject, QDistinct>
-      distinctByOriginalLanguageLong({bool caseSensitive = true}) {
+      distinctByOriginalLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'originalLanguageLong',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'originalLanguageId');
     });
   }
 
@@ -1736,10 +1512,9 @@ extension VideoObjectQueryWhereDistinct
   }
 
   QueryBuilder<VideoObject, VideoObject, QDistinct>
-      distinctByTranslatedLanguageLong({bool caseSensitive = true}) {
+      distinctByTranslatedLanguageId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'translatedLanguageLong',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'translatedLanguageId');
     });
   }
 
@@ -1772,10 +1547,10 @@ extension VideoObjectQueryProperty
     });
   }
 
-  QueryBuilder<VideoObject, String?, QQueryOperations>
-      originalLanguageLongProperty() {
+  QueryBuilder<VideoObject, int?, QQueryOperations>
+      originalLanguageIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'originalLanguageLong');
+      return query.addPropertyName(r'originalLanguageId');
     });
   }
 
@@ -1791,10 +1566,10 @@ extension VideoObjectQueryProperty
     });
   }
 
-  QueryBuilder<VideoObject, String?, QQueryOperations>
-      translatedLanguageLongProperty() {
+  QueryBuilder<VideoObject, int?, QQueryOperations>
+      translatedLanguageIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'translatedLanguageLong');
+      return query.addPropertyName(r'translatedLanguageId');
     });
   }
 

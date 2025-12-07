@@ -1,13 +1,14 @@
+import 'package:eiga_learn/data/models/blockObject.dart';
+import 'package:eiga_learn/data/models/languageObject.dart';
+import 'package:eiga_learn/data/models/phraseObject.dart';
+import 'package:eiga_learn/data/models/videoObject.dart';
+import 'package:eiga_learn/data/models/wordObject.dart';
 import 'package:eiga_learn/navigators/AppRouter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart' show ProviderScope;
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'models/videoObject.dart';
-import 'models/phraseObject.dart';
-import 'models/blockObject.dart';
-import 'models/wordObject.dart';
-
+import 'providers/isarProvider.dart';
 late final Isar isar;
 
 Future<void> main() async {
@@ -21,14 +22,18 @@ Future<void> main() async {
       PhraseObjectSchema,
       BlockObjectSchema,
       WordObjectSchema,
+      LanguageObjectSchema,
     ],
     directory: dir.path,
   );
 
   runApp(
-      const ProviderScope(
-         child: MyApp(),
-      ),
+    ProviderScope(
+      overrides: [
+        isarProvider.overrideWithValue(isar),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 

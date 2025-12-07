@@ -1,7 +1,8 @@
-import 'package:eiga_learn/models/blockObject.dart';
-import 'package:eiga_learn/services/phraseService.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
+
+import '../data/models/blockObject.dart';
 
 class BlockService extends StateNotifier<List<BlockObject>> {
   final Isar db;

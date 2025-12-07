@@ -1,7 +1,7 @@
 
 
 
-import 'package:eiga_learn/models/phraseObject.dart';
+import 'package:eiga_learn/data/models/phraseObject.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
