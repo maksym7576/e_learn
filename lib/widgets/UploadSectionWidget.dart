@@ -1,10 +1,13 @@
 import 'package:eiga_learn/data/models/languageObject.dart';
+import 'package:eiga_learn/data/models/videoObject.dart';
 import 'package:eiga_learn/providers/ServicesProviders.dart';
+import 'package:eiga_learn/providers/globalProviders.dart';
 import 'package:eiga_learn/widgets/FileUploadButtonWidget.dart';
 import 'package:eiga_learn/widgets/SelectedFilesWidget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UploadSectionWidget extends ConsumerStatefulWidget {
@@ -72,10 +75,93 @@ class _UploadSectionWidgetState extends ConsumerState<UploadSectionWidget> {
       return;
     }
 
-    // TODO: pass _videoLanguageId and _userLanguageId to video creation method
-    print('Creating video:');
-    print('Video language ID: $_videoLanguageId');
-    print('User language ID: $_userLanguageId');
+    try {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Text('Creating video lesson...'),
+              ],
+            ),
+            duration: Duration(seconds: 30),
+          ),
+        );
+      }
+
+      final newVideo = VideoObject()
+        ..videoName = _nameController.text.trim().isEmpty
+            ? null
+            : _nameController.text.trim()
+        ..videoPath = _videoFile
+        ..srtPath = _srtFile
+        ..originalLanguageId = _videoLanguageId
+        ..translatedLanguageId = _userLanguageId;
+
+      final videoId = await ref.read(videoServiceProvider.notifier).addVideo(newVideo);
+      ref.read(currentVideoIdProvider.notifier).state = videoId;
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Colors.white),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text('Video lesson created successfully! ID: $videoId'),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+
+        setState(() {
+          _videoFile = null;
+          _srtFile = null;
+          _videoLanguageId = null;
+          _userLanguageId = null;
+          _nameController.clear();
+        });
+
+        widget.uploadAnimationController
+          ..reset()
+          ..forward();
+      }
+      context.go('/video');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error_rounded, color: Colors.white),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text('Error: ${e.toString()}'),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _addNewLanguage(String languageName) async {
